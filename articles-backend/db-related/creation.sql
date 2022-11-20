@@ -41,3 +41,9 @@ CREATE TABLE tags_articles
     tag_id     INT REFERENCES tags,
     article_id INT REFERENCES articles
 );
+
+ALTER TABLE articles
+    ADD publication_date DATE;
+
+ALTER TABLE articles
+    ADD description TEXT;
