@@ -2,7 +2,6 @@ package com.proudmur.articlesbackend.model;
 
 import lombok.Getter;
 import lombok.Setter;
-
 import java.time.LocalDate;
 
 @Getter
@@ -10,7 +9,7 @@ import java.time.LocalDate;
 public class Article {
     private int id;
     private String title;
-    private int fileId;
-    private LocalDate publicationDate;
     private String description;
+    private LocalDate publicationDate;
+    private int fileId;
 }
