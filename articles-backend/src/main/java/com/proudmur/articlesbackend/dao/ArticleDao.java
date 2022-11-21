@@ -24,8 +24,28 @@ public class ArticleDao {
     }
 
     public Article findArticleById(int id) {
-        //TODO
-        return null;
+        String sql = "SELECT * FROM articles WHERE id = ?";
+        return jdbcTemplate.queryForObject(sql, new ArticleRowMapper(), id);
     }
 
+    public int saveArticle(Article article) {
+        String sql = "INSERT INTO articles (title, description, publication_date, file_id) VALUES (?, ?, ?, ?)";
+        return jdbcTemplate.update(sql, article.getTitle(), article.getDescription(),
+                article.getPublicationDate(), article.getFileId());
+    }
+
+    public int deleteArticleById(int id) {
+        String sql = "DELETE FROM articles WHERE id = ?";
+        return jdbcTemplate.update(sql, id);
+    }
+
+    public int updateArticleWithoutFileChange(Article article) {
+        String sql = "UPDATE articles SET title = ?, description = ? WHERE id = ?";
+        return jdbcTemplate.update(sql, article.getTitle(), article.getDescription(), article.getId());
+    }
+
+    public int updateArticleWithFileChange(Article article) {
+        String sql = "UPDATE articles SET title = ?, description = ?, file_id = ? WHERE id = ?";
+        return jdbcTemplate.update(sql, article.getTitle(), article.getDescription(), article.getFileId());
+    }
 }

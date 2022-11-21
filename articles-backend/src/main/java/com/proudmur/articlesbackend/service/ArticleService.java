@@ -24,4 +24,20 @@ public class ArticleService {
     public Article getArticleById(int id) {
         return articleDao.findArticleById(id);
     }
+
+    public int saveArticle(Article article) {
+        return articleDao.saveArticle(article);
+    }
+
+    public int deleteArticle(int id) {
+        return articleDao.deleteArticleById(id);
+    }
+
+    public int updateArticle(int id, Article article) {
+        article.setId(id);
+        if (article.getFileId() != 0) {
+            return articleDao.updateArticleWithFileChange(article);
+        }
+        return articleDao.updateArticleWithoutFileChange(article);
+    }
 }
