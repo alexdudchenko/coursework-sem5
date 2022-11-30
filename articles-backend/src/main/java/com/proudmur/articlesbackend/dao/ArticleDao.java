@@ -23,6 +23,11 @@ public class ArticleDao {
         return jdbcTemplate.query(sql, new ArticleRowMapper(), size);
     }
 
+    public List<Article> findArticles() {
+        String sql = "SELECT * FROM articles ORDER BY publication_date DESC";
+        return jdbcTemplate.query(sql, new ArticleRowMapper());
+    }
+
     public Article findArticleById(int id) {
         String sql = "SELECT * FROM articles WHERE id = ?";
         return jdbcTemplate.queryForObject(sql, new ArticleRowMapper(), id);

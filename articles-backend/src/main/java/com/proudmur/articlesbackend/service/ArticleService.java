@@ -21,6 +21,10 @@ public class ArticleService {
         return articleDao.findRecentArticles(size);
     }
 
+    public List<Article> getAll() {
+        return articleDao.findArticles();
+    }
+
     public Article getArticleById(int id) {
         return articleDao.findArticleById(id);
     }

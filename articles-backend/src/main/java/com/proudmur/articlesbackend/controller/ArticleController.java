@@ -3,14 +3,18 @@ package com.proudmur.articlesbackend.controller;
 import com.proudmur.articlesbackend.model.Article;
 import com.proudmur.articlesbackend.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
+@Controller
 public class ArticleController {
 
     private final ArticleService articleService;
+    private static final String ARTICLES = "articles";
+    private static final String REDIRECT_TO_ADMIN_ARTICLES = "redirect:/admin/articles";
 
     @Autowired
     public ArticleController(ArticleService articleService) {
@@ -18,27 +22,50 @@ public class ArticleController {
     }
 
     @GetMapping("/articles")
-    public List<Article> getRecent(@RequestParam int size) {
-        return articleService.getRecent(size);
+    public String articles(@RequestParam(required = false, defaultValue = "5") int size, Model model) {
+        List<Article> articles = articleService.getRecent(size);
+        model.addAttribute(ARTICLES, articles);
+        return ARTICLES;
     }
 
     @GetMapping("/articles/{id}")
-    public Article returnArticle(@PathVariable int id) {
-        return articleService.getArticleById(id);
+    public String returnArticle(@PathVariable int id, Model model) {
+        Article article = articleService.getArticleById(id);
+        model.addAttribute(ARTICLES, article);
+        return "article";
     }
 
-    @PostMapping("/articles")
-    public Integer saveArticle(@RequestBody Article article) {
-        return articleService.saveArticle(article);
+    @GetMapping("/admin/articles")
+    public String adminPage(Model model) {
+        List<Article> articles = articleService.getAll();
+        model.addAttribute(ARTICLES, articles);
+        return "admin-page-articles";
     }
 
-    @DeleteMapping("/articles/{id}")
-    public Integer deleteArticle(@PathVariable int id) {
-        return articleService.deleteArticle(id);
+    @GetMapping("/admin/articles/{id}/edit")
+    public String editPage(@PathVariable int id, Model model) {
+        Article article = articleService.getArticleById(id);
+        model.addAttribute("article", article);
+        return "admin-edit-article";
     }
 
-    @PutMapping("/articles/{id}")
-    public Integer updateArticle(@PathVariable int id, @RequestBody Article article) {
-        return articleService.updateArticle(id, article);
+    @PostMapping("/admin/articles")
+    public String saveArticle(@RequestBody Article article, Model model) {
+        List<Article> articles = articleService.getAll();
+        model.addAttribute(ARTICLES, articles);
+        articleService.saveArticle(article);
+        return REDIRECT_TO_ADMIN_ARTICLES;
+    }
+
+    @PostMapping("/admin/articles/{id}/delete")
+    public String deleteArticle(@PathVariable int id) {
+        articleService.deleteArticle(id);
+        return REDIRECT_TO_ADMIN_ARTICLES;
+    }
+
+    @PostMapping("/admin/articles/{id}/save-edited")
+    public String updateArticle(@PathVariable int id, @RequestBody Article article) {
+        articleService.updateArticle(id, article);
+        return REDIRECT_TO_ADMIN_ARTICLES;
     }
 }

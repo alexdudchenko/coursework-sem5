@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit</title>
+</head>
+<body>
+<section>
+  <form th:action="@{/admin/articles/{id}/save-edited(id=${article.id})}" method="post">
+    <input type="hidden" name="id" th:value="${article.id}">
+    <input type="text" name="title" th:value="${article.title}">
+    <input type="text" name="description" th:value="${article.description}">
+    <input type="submit" value="Save">
+  </form>
+</section>
+<section>
+  <form th:action="@{/admin/articles/{id}/delete(id=${article.id})}" method="post">
+    <input type="submit" value="Delete">
+  </form>
+</section>
+</body>
+</html>

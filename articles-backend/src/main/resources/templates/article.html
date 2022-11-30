@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+    <section>
+        <p th:text="${article.title}"/>
+        <p th:text="${article.description}"/>
+        <a th:href="@{/files/{id}(id=${article.fileId})}">Download</a>
+    </section>
+</body>
+</html>

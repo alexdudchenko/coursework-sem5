@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create article</title>
+</head>
+<body>
+<form th:action="@{/admin/articles}" method="post">
+  <input type="hidden" name="id">
+  <input type="text" name="title">
+  <input type="text" name="description">
+  <input type="submit" value="Save">
+</form>
+</body>
+</html>
