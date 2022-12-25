@@ -13,6 +13,7 @@ import java.util.List;
 public class ArticleController {
 
     private final ArticleService articleService;
+    private static final String ARTICLE = "article";
     private static final String ARTICLES = "articles";
     private static final String REDIRECT_TO_ADMIN_ARTICLES = "redirect:/admin/articles";
 
@@ -31,8 +32,8 @@ public class ArticleController {
     @GetMapping("/articles/{id}")
     public String returnArticle(@PathVariable int id, Model model) {
         Article article = articleService.getArticleById(id);
-        model.addAttribute(ARTICLES, article);
-        return "article";
+        model.addAttribute(ARTICLE, article);
+        return ARTICLE;
     }
 
     @GetMapping("/admin/articles")
@@ -45,7 +46,7 @@ public class ArticleController {
     @GetMapping("/admin/articles/{id}/edit")
     public String editPage(@PathVariable int id, Model model) {
         Article article = articleService.getArticleById(id);
-        model.addAttribute("article", article);
+        model.addAttribute(ARTICLE, article);
         return "admin-edit-article";
     }
 
