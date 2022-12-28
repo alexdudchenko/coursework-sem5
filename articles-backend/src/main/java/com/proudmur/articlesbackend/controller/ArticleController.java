@@ -2,13 +2,18 @@ package com.proudmur.articlesbackend.controller;
 
 import com.proudmur.articlesbackend.model.Article;
 import com.proudmur.articlesbackend.service.ArticleService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
+import java.awt.*;
 import java.util.List;
 
+@Slf4j
 @Controller
 public class ArticleController {
 
@@ -64,9 +69,20 @@ public class ArticleController {
         return REDIRECT_TO_ADMIN_ARTICLES;
     }
 
-    @PostMapping("/admin/articles/{id}/save-edited")
-    public String updateArticle(@PathVariable int id, @RequestBody Article article) {
+    @PostMapping(value = "/admin/articles/{id}/save-edited", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    public String updateArticle(@PathVariable int id, Article article) {
+        log.debug(article.toString());
         articleService.updateArticle(id, article);
         return REDIRECT_TO_ADMIN_ARTICLES;
+    }
+
+    @GetMapping(value="/login")
+    public String getLoginPage(Model model){
+        return "login";
+    }
+
+    @GetMapping(value = "/")
+    public String root() {
+        return "index";
     }
 }

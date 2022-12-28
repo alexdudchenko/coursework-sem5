@@ -10,11 +10,13 @@
     <input type="hidden" name="id" th:value="${article.id}">
     <input type="text" name="title" th:value="${article.title}">
     <input type="text" name="description" th:value="${article.description}">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
     <input type="submit" value="Save">
   </form>
 </section>
 <section>
   <form th:action="@{/admin/articles/{id}/delete(id=${article.id})}" method="post">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
     <input type="submit" value="Delete">
   </form>
 </section>

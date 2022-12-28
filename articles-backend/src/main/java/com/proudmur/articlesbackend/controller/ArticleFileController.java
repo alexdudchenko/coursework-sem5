@@ -28,7 +28,7 @@ public class ArticleFileController {
         this.fileService = fileService;
     }
 
-    @PostMapping("/files")
+    @PostMapping("/admin/files")
     public int upload(@RequestParam MultipartFile file) throws IOException {
         return fileService.saveFile(file);
     }
