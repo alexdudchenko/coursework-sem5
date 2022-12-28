@@ -5,11 +5,11 @@
     <title>Create article</title>
 </head>
 <body>
-<form th:action="@{/admin/articles}" method="post">
-  <input type="hidden" name="id">
-  <input type="text" name="title">
-  <input type="text" name="description">
-  <input type="submit" value="Save">
+<form th:action="@{/admin/articles}" method="post" enctype="multipart/form-data">
+    <input type="text" name="title"/>
+    <input type="text" name="description"/>
+    <input type="file" name="file" accept=".doc,.docs"/>
+    <input type="submit" value="Save"/>
 </form>
 </body>
 </html>

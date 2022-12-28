@@ -1,16 +1,24 @@
 package com.proudmur.articlesbackend.controller;
 
 import com.proudmur.articlesbackend.model.Article;
+import com.proudmur.articlesbackend.model.User;
 import com.proudmur.articlesbackend.service.ArticleService;
+import com.proudmur.articlesbackend.service.FileService;
+import com.proudmur.articlesbackend.service.SavingsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 @Slf4j
@@ -18,13 +26,20 @@ import java.util.List;
 public class ArticleController {
 
     private final ArticleService articleService;
+
+    private final FileService fileService;
+
+    private final SavingsService savingsService;
+
     private static final String ARTICLE = "article";
     private static final String ARTICLES = "articles";
     private static final String REDIRECT_TO_ADMIN_ARTICLES = "redirect:/admin/articles";
 
     @Autowired
-    public ArticleController(ArticleService articleService) {
+    public ArticleController(ArticleService articleService, FileService fileService, SavingsService savingsService) {
         this.articleService = articleService;
+        this.fileService = fileService;
+        this.savingsService = savingsService;
     }
 
     @GetMapping("/articles")
@@ -35,14 +50,16 @@ public class ArticleController {
     }
 
     @GetMapping("/articles/{id}")
-    public String returnArticle(@PathVariable int id, Model model) {
+    public String returnArticle(@AuthenticationPrincipal User user, @PathVariable int id, Model model) {
         Article article = articleService.getArticleById(id);
+        Boolean saved = savingsService.isSaved(user.getId(), id);
         model.addAttribute(ARTICLE, article);
+        model.addAttribute("saved", saved);
         return ARTICLE;
     }
 
     @GetMapping("/admin/articles")
-    public String adminPage(Model model) {
+    public String adminPage(HttpServletRequest request, Model model) {
         List<Article> articles = articleService.getAll();
         model.addAttribute(ARTICLES, articles);
         return "admin-page-articles";
@@ -55,11 +72,22 @@ public class ArticleController {
         return "admin-edit-article";
     }
 
-    @PostMapping("/admin/articles")
-    public String saveArticle(@RequestBody Article article, Model model) {
+    @GetMapping("/admin/articles/create")
+    public String redirectToCreateForm() {
+        return "admin-create-article";
+    }
+
+    @PostMapping(value = "/admin/articles", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public String saveArticle(@RequestParam String title, @RequestParam String description, @RequestParam MultipartFile file, Model model) throws IOException {
+        int id = fileService.saveFile(file);
+        Article article = new Article();
+        article.setTitle(title);
+        article.setDescription(description);
+        article.setFileId(id);
+        articleService.saveArticle(article);
+
         List<Article> articles = articleService.getAll();
         model.addAttribute(ARTICLES, articles);
-        articleService.saveArticle(article);
         return REDIRECT_TO_ADMIN_ARTICLES;
     }
 
@@ -76,13 +104,4 @@ public class ArticleController {
         return REDIRECT_TO_ADMIN_ARTICLES;
     }
 
-    @GetMapping(value="/login")
-    public String getLoginPage(Model model){
-        return "login";
-    }
-
-    @GetMapping(value = "/")
-    public String root() {
-        return "index";
-    }
 }

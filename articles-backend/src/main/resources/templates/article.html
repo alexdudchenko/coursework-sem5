@@ -10,5 +10,15 @@
         <p th:text="${article.description}"/>
         <a th:href="@{/files/{id}(id=${article.fileId})}">Download</a>
     </section>
+    <section>
+        <form th:if="${saved}" th:action="@{/articles/unsave-for-later}" method="post">
+            <input type="hidden" name="id" th:value="${article.id}">
+            <input type="submit" value="Delete bookmark">
+        </form>
+        <form th:unless="${saved}" th:action="@{/articles/save-for-later}" method="post">
+            <input type="hidden" name="id" th:value="${article.id}">
+            <input type="submit" value="Save for later">
+        </form>
+    </section>
 </body>
 </html>
