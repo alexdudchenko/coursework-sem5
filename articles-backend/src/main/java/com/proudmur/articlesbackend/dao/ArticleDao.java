@@ -4,6 +4,9 @@ import com.proudmur.articlesbackend.model.Article;
 import com.proudmur.articlesbackend.model.mapper.ArticleRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -12,10 +15,13 @@ import java.util.List;
 public class ArticleDao {
 
     private final JdbcTemplate jdbcTemplate;
+    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+
 
     @Autowired
-    public ArticleDao(JdbcTemplate jdbcTemplate) {
+    public ArticleDao(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
+        this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
     }
 
     public List<Article> findRecentArticles(int size) {
@@ -52,5 +58,11 @@ public class ArticleDao {
     public int updateArticleWithFileChange(Article article) {
         String sql = "UPDATE articles SET title = ?, description = ?, file_id = ? WHERE id = ?";
         return jdbcTemplate.update(sql, article.getTitle(), article.getDescription(), article.getFileId());
+    }
+
+    public List<Article> getArticles(List<Integer> ids) {
+        SqlParameterSource parameters = new MapSqlParameterSource("ids", ids);
+        String sql = "SELECT * FROM articles WHERE id IN (:ids)";
+        return namedParameterJdbcTemplate.query(sql, parameters, new ArticleRowMapper());
     }
 }

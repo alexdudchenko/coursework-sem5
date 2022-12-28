@@ -11,7 +11,9 @@
   <p th:text="${user.email}"></p>
 </section>
 <section>
-
+    <div th:each="article : ${savedArticles}">
+        <a th:text="${article.title}" th:href="@{/articles/{id}(id=${article.id})}">Article</a>
+    </div>
 </section>
 </body>
 </html>

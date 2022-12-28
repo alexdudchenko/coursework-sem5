@@ -44,4 +44,8 @@ public class ArticleService {
         }
         return articleDao.updateArticleWithoutFileChange(article);
     }
+
+    public List<Article> getArticles(List<Integer> ids) {
+        return articleDao.getArticles(ids);
+    }
 }

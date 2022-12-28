@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public class SavingsDao {
 
@@ -27,5 +29,10 @@ public class SavingsDao {
     public void deleteBookmark(Integer userId, Integer articleId) {
         String sql = "DELETE FROM savings WHERE user_id = ? AND article_id = ?";
         jdbcTemplate.update(sql, userId, articleId);
+    }
+
+    public List<Integer> getSavedForUser(Integer userId) {
+        String sql = "SELECT article_id FROM savings WHERE user_id = ?";
+        return jdbcTemplate.queryForList(sql, Integer.class, userId);
     }
 }
