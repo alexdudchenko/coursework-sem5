@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class IndexController {
 
     @GetMapping(value="/login")
-    public String getLoginPage(Model model){
+    public String getLoginPage(){
         return "login";
     }
 

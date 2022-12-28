@@ -5,9 +5,17 @@
   <title></title>
 </head>
 <body>
+<section>
+  <form th:action="@{/articles/find}">
+    <input name="pattern" placeholder="Search">
+    <input type="submit">
+  </form>
+</section>
+<section>
 <div th:each="article : ${articles}">
   <a th:text="${article.title}" th:href="@{/articles/{id}(id=${article.id})}">Article</a>
   <a th:href="@{/admin/articles/{id}/edit(id=${article.id})}">Edit</a>
 </div>
+</section>
 </body>
 </html>

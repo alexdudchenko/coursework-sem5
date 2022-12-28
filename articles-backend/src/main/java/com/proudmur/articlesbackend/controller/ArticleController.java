@@ -99,9 +99,16 @@ public class ArticleController {
 
     @PostMapping(value = "/admin/articles/{id}/save-edited", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public String updateArticle(@PathVariable int id, Article article) {
-        log.debug(article.toString());
         articleService.updateArticle(id, article);
         return REDIRECT_TO_ADMIN_ARTICLES;
+    }
+
+    @GetMapping("/articles/find")
+    public String findByTitle(@AuthenticationPrincipal User user, String pattern, Model model) {
+
+        model.addAttribute(ARTICLES, articleService.findArticlesByTitle(pattern));
+
+        return user.getRole().equals("ROLE_ADMIN") ? "admin-page-articles" : ARTICLES;
     }
 
 }

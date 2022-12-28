@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collections;
 import java.util.List;
 
 @Repository
@@ -61,8 +62,16 @@ public class ArticleDao {
     }
 
     public List<Article> getArticles(List<Integer> ids) {
+        if (ids.isEmpty()) {
+            return Collections.emptyList();
+        }
         SqlParameterSource parameters = new MapSqlParameterSource("ids", ids);
         String sql = "SELECT * FROM articles WHERE id IN (:ids)";
         return namedParameterJdbcTemplate.query(sql, parameters, new ArticleRowMapper());
+    }
+
+    public List<Article> findArticlesByTitle(String title) {
+        String sql = "SELECT * FROM articles WHERE (lower(title) LIKE concat('%', ?, '%'))";
+        return jdbcTemplate.query(sql, new ArticleRowMapper(), title.toLowerCase());
     }
 }

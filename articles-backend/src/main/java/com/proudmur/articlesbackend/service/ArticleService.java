@@ -48,4 +48,8 @@ public class ArticleService {
     public List<Article> getArticles(List<Integer> ids) {
         return articleDao.getArticles(ids);
     }
+
+    public List<Article> findArticlesByTitle(String title) {
+        return articleDao.findArticlesByTitle(title);
+    }
 }

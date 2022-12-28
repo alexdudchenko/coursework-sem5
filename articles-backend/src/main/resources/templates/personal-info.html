@@ -15,5 +15,10 @@
         <a th:text="${article.title}" th:href="@{/articles/{id}(id=${article.id})}">Article</a>
     </div>
 </section>
+<section>
+    <form th:action="@{/logout}" method="post">
+        <input type="submit" value="Log out">
+    </form>
+</section>
 </body>
 </html>
