@@ -27,8 +27,8 @@ CREATE TABLE articles
 CREATE TABLE savings
 (
     id         SERIAL PRIMARY KEY,
-    user_id    INT REFERENCES users,
-    article_id INT REFERENCES articles
+    user_id    INT REFERENCES users ON DELETE CASCADE,
+    article_id INT REFERENCES articles ON DELETE CASCADE
 );
 
 CREATE TABLE tags
@@ -40,6 +40,13 @@ CREATE TABLE tags
 CREATE TABLE tags_articles
 (
     id         SERIAL PRIMARY KEY,
-    tag_id     INT REFERENCES tags,
-    article_id INT REFERENCES articles
+    tag_id     INT REFERENCES tags ON DELETE CASCADE,
+    article_id INT REFERENCES articles ON DELETE CASCADE
 );
+
+CREATE TABLE ratings (
+                         id SERIAL PRIMARY KEY,
+                         user_id INT REFERENCES users ON DELETE CASCADE,
+                         article_id INT REFERENCES articles ON DELETE CASCADE,
+                         rating INT CHECK ( rating > 0 AND rating <= 5 )
+)

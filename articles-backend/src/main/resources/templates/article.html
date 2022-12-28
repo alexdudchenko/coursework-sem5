@@ -20,5 +20,34 @@
             <input type="submit" value="Save for later">
         </form>
     </section>
+    <section>
+        <div>
+            <form th:action="@{/rate}" method="post">
+                <input type="hidden" name="rating" value="1">
+                <input type="hidden" name="articleId" th:value="${article.id}">
+                <input type="submit" value="1">
+            </form>
+            <form th:action="@{/rate}" method="post">
+                <input type="hidden" name="rating" value="2">
+                <input type="hidden" name="articleId" th:value="${article.id}">
+                <input type="submit" value="2">
+            </form>
+            <form th:action="@{/rate}" method="post">
+                <input type="hidden" name="rating" value="3">
+                <input type="hidden" name="articleId" th:value="${article.id}">
+                <input type="submit" value="3">
+            </form>
+            <form th:action="@{/rate}" method="post">
+                <input type="hidden" name="rating" value="4">
+                <input type="hidden" name="articleId" th:value="${article.id}">
+                <input type="submit" value="4">
+            </form>
+            <form th:action="@{/rate}" method="post">
+                <input type="hidden" name="rating" value="5">
+                <input type="hidden" name="articleId" th:value="${article.id}">
+                <input type="submit" value="5">
+            </form>
+        </div>
+    </section>
 </body>
 </html>

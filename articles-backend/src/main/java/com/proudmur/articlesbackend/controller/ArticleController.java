@@ -4,6 +4,7 @@ import com.proudmur.articlesbackend.model.Article;
 import com.proudmur.articlesbackend.model.User;
 import com.proudmur.articlesbackend.service.ArticleService;
 import com.proudmur.articlesbackend.service.FileService;
+import com.proudmur.articlesbackend.service.RatingService;
 import com.proudmur.articlesbackend.service.SavingsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,21 +32,29 @@ public class ArticleController {
 
     private final SavingsService savingsService;
 
+    private final RatingService ratingService;
+
     private static final String ARTICLE = "article";
     private static final String ARTICLES = "articles";
     private static final String REDIRECT_TO_ADMIN_ARTICLES = "redirect:/admin/articles";
 
     @Autowired
-    public ArticleController(ArticleService articleService, FileService fileService, SavingsService savingsService) {
+    public ArticleController(ArticleService articleService, FileService fileService, SavingsService savingsService, RatingService ratingService) {
         this.articleService = articleService;
         this.fileService = fileService;
         this.savingsService = savingsService;
+        this.ratingService = ratingService;
     }
 
     @GetMapping("/articles")
-    public String articles(@RequestParam(required = false, defaultValue = "5") int size, Model model) {
+    public String articles(@AuthenticationPrincipal User user,
+                           @RequestParam(required = false, defaultValue = "5") int size,
+                           Model model) {
         List<Article> articles = articleService.getRecent(size);
+        List<Article> recommended = articleService.getArticles(ratingService.getRecommendation(user.getId(), size));
+        System.out.println(recommended);
         model.addAttribute(ARTICLES, articles);
+        model.addAttribute("recommended", recommended);
         return ARTICLES;
     }
 

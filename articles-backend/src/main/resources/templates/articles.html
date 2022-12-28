@@ -12,6 +12,14 @@
     </form>
 </section>
 <section>
+    <h1>Recommended</h1>
+    <p th:if="${recommended.isEmpty()}">Nothing there yet. Rate articles for more!</p>
+    <div th:each="recommendation : ${recommended}">
+        <a th:text="${recommendation.title}" th:href="@{/articles/{id}(id=${recommendation.id})}">Article</a>
+    </div>
+</section>
+<section>
+    <h1>Recent</h1>
     <div th:each="article : ${articles}">
         <a th:text="${article.title}" th:href="@{/articles/{id}(id=${article.id})}">Article</a>
     </div>
