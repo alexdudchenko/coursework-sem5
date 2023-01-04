@@ -31,19 +31,6 @@ CREATE TABLE savings
     article_id INT REFERENCES articles ON DELETE CASCADE
 );
 
-CREATE TABLE tags
-(
-    id    SERIAL PRIMARY KEY,
-    title VARCHAR(30) NOT NULL
-);
-
-CREATE TABLE tags_articles
-(
-    id         SERIAL PRIMARY KEY,
-    tag_id     INT REFERENCES tags ON DELETE CASCADE,
-    article_id INT REFERENCES articles ON DELETE CASCADE
-);
-
 CREATE TABLE ratings (
                          id SERIAL PRIMARY KEY,
                          user_id INT REFERENCES users ON DELETE CASCADE,
